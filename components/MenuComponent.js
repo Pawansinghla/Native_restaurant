@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
-import {View,FlatList} from 'react-native';
+import {View,FlatList, ShadowPropTypesIOS} from 'react-native';
 import{ListItem} from 'react-native-elements';
 
-function Menu({dishes}){
+function Menu(props){
 
     const renderMenuItem=({item,index})=>{
         return(
@@ -11,6 +11,7 @@ function Menu({dishes}){
             title={item.name}
             subtitle={item.description}
             hideChevron={true}
+            onPress={()=>props.onPress(item.id)}
             leftAvatar={{source:require('./images/uthappizza.png')}}
             
             />
@@ -20,7 +21,7 @@ function Menu({dishes}){
 
     return(
         <FlatList
-        data={dishes}
+        data={props.dishes}
         renderItem={renderMenuItem}
         keyExtractor={item=>item.id.toString()}
         />
