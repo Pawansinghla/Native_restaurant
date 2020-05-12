@@ -26,7 +26,6 @@ class  Menu extends Component{
                 hideChevron={true}
                 onPress={()=>navigate('Dishdetail',{dishId:item.id})}
                 leftAvatar={{source:require('./images/uthappizza.png')}}
-                
                 />
     
             );
