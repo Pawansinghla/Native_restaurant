@@ -4,6 +4,7 @@ import { Card, ListItem } from 'react-native-elements';
 // import { LEADERS } from '../shared/leaders';
 import {connect} from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
 
 
 const mapStateToProps=state=>{
@@ -55,6 +56,34 @@ class About extends Component {
             );
         }
 
+        if(this.props.leaders.isLoading){
+            return(
+                <ScrollView style={{ marginTop: 10 }}>
+               <History/>
+                <Card title="Corporate Leadership" >
+                    <Loading/>
+                
+                </Card>
+                </ScrollView>
+            
+
+            );
+        }
+        else if(this.props.leaders.errMess){
+            
+            return(
+                <ScrollView style={{ marginTop: 10 }}>
+               <History/>
+                <Card title="Corporate Leadership" >
+                <Text>{this.props.leaders.errMess}</Text>
+                </Card>
+                </ScrollView>
+            
+
+            );
+
+        }
+        else{
         return (
 
             <ScrollView style={{ marginTop: 10 }}>
@@ -71,6 +100,7 @@ class About extends Component {
 
 
         );
+        }
     }
 
 }
