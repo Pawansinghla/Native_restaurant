@@ -11,7 +11,7 @@ function Contact() {
         <Card title="Contact Information">
             <View >
                 <Text style={{margin:10,fontSize:16 }}>
-                    989898121,Clear Water Bay Road
+                   121,Clear Water Bay Road
                 </Text>
                 <Text style={{margin:10,fontSize:16 }}>Clear Water Bay, Kowloon
                     </Text>
