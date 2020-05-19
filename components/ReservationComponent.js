@@ -67,8 +67,10 @@ class Reservation extends Component {
                     <Text style={styles.formLabel}>Smoking/Non-Smoking?</Text>
                     <Switch
                         style={styles.formItem}
-                        vale={this.state.smoking}
-                        trackColor='#512DA8'
+                        value={this.state.smoking}
+                       // onTintColor='#512DA8'
+                       trackColor={{true:'#512DA8',false:'gray'}}
+                      //trackColor={{ true: '#7ab8e1', false: Platform.OS=='android'?'#d3d3d3':'#fbfbfb'  }}
                         onValueChange={(value) => this.setState({ smoking: value })}
 
                     >
