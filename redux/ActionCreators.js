@@ -171,5 +171,11 @@ export const postComment=(dishId,rating,author,comment)=>(dispatch)=>{
     setTimeout(()=>{
         dispatch(addComment(newComment));
 
-    },1000);
+    },2000);
 }
+
+export const deleteFavorite=(dishId)=>({
+    type:ActionTypes.DELETE_FAVORITE,
+    payload:dishId
+});
+

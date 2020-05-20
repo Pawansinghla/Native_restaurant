@@ -10,7 +10,7 @@ import About from './AboutComponent';
 import { Icon } from 'react-native-elements';
 import {connect} from 'react-redux';
 import {fetchDishes,fetchLeaders,fetchPromos,fetchComments } from '../redux/ActionCreators';
-
+import  Favorites from  './FavoriteComponent';
 
 const mapStateToProps=state=>{
     return{
@@ -112,6 +112,24 @@ const HomeNavigator = createStackNavigator({
 });
 const ReservationNavigator = createStackNavigator({
     Reservation: { screen:Reservation }
+}, {
+    navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        },
+        headerLeft: <Icon name="menu" size={24}
+            color='white'
+            onPress={() => navigation.toggleDrawer()}
+        />
+    })
+});
+
+const FavoritesNavigator = createStackNavigator({
+    Favorites: { screen:Favorites }
 }, {
     navigationOptions: ({ navigation }) => ({
         headerStyle: {
@@ -242,6 +260,24 @@ const MainNavigator = createDrawerNavigator({
 
 
         },
+    },
+    
+    Favorites: {
+        screen: FavoritesNavigator,
+        navigationOptions: {
+            title: 'My Favorites',
+            drawLabel: 'My Favorites',
+            drawerIcon: ({ tintcolor }) => (
+                <Icon
+                    name='heart'
+                    type='font-awesome'
+                    size={24}
+                    color={tintcolor}
+                />
+            )
+
+
+        },
     }
 }, {
     drawerBackgroundColor: '#D1C4E9',
@@ -259,7 +295,7 @@ class Main extends Component {
     }
     render() {
         return (
-            <View style={{ flex: 1, paddingTop:30}}>
+            <View style={{ flex: 1,           paddingTop: Platform.OS === "ios" ? 0 : Expo.Constants.statusBarHeight}}>
                 <MainNavigator />
             </View>
 
