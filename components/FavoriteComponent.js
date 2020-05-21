@@ -8,6 +8,7 @@ import SwipeOut from 'react-native-swipeout';
 import { deleteFavorite } from '../redux/ActionCreators';
 import * as Animatable from 'react-native-animatable';
 
+
 const mapStateToProps = state => {
     return {
         dishes: state.dishes,
