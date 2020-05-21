@@ -6,6 +6,7 @@ import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavourite, postComment } from '../redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return {
@@ -26,34 +27,36 @@ function RenderDish(props) {
     const dish = props.dish;
     if (dish != null) {
         return (
-            <Card
-                featuredTitle={dish.name}
-                image={{ uri: baseUrl + dish.image }}
-            >
-                <Text style={{ margin: 10 }}>
-                    {dish.description}
-                </Text>
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                <Card
+                    featuredTitle={dish.name}
+                    image={{ uri: baseUrl + dish.image }}
+                >
+                    <Text style={{ margin: 10 }}>
+                        {dish.description}
+                    </Text>
 
-                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                    <Icon
-                        raised
-                        reverse
-                        name={props.favourite ? 'heart' : 'heart-o'}
-                        type='font-awesome'
-                        color='#f50'
-                        onPress={() => props.favourite ? console.log("alredy favourite") : props.onPress()}
-                    />
-                    <Icon
-                        raised
-                        reverse
-                        name={'pencil'}
-                        type='font-awesome'
-                        onPress={() => props.onPressComment()}
-                        color='#512DA8'
+                    <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                        <Icon
+                            raised
+                            reverse
+                            name={props.favourite ? 'heart' : 'heart-o'}
+                            type='font-awesome'
+                            color='#f50'
+                            onPress={() => props.favourite ? console.log("alredy favourite") : props.onPress()}
+                        />
+                        <Icon
+                            raised
+                            reverse
+                            name={'pencil'}
+                            type='font-awesome'
+                            onPress={() => props.onPressComment()}
+                            color='#512DA8'
 
-                    />
-                </View>
-            </Card>
+                        />
+                    </View>
+                </Card>
+            </Animatable.View>
 
         );
     }
@@ -68,6 +71,7 @@ function RenderComments(props) {
 
     const RenderCommentItem = ({ item, index }) => {
         return (
+
             <View key={index} style={{ margin: 10 }}>
                 <Text style={{ fontSize: 14 }}>
                     {item.comment}
@@ -86,14 +90,16 @@ function RenderComments(props) {
 
     }
     return (
-        <Card title="Comments">
-            <FlatList
-                data={comments}
-                renderItem={RenderCommentItem}
-                keyExtractor={item => item.id.toString()}
-            />
+        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+            <Card title="Comments">
+                <FlatList
+                    data={comments}
+                    renderItem={RenderCommentItem}
+                    keyExtractor={item => item.id.toString()}
+                />
 
-        </Card>
+            </Card>
+        </Animatable.View>
 
     );
 

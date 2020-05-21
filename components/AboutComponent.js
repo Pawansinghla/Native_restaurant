@@ -2,14 +2,17 @@ import React, { Component } from 'react';
 import { View, FlatList, Text, ScrollView } from 'react-native';
 import { Card, ListItem } from 'react-native-elements';
 // import { LEADERS } from '../shared/leaders';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 
+import * as Animatable from 'react-native-animatable';
 
-const mapStateToProps=state=>{
-    return{
-        leaders:state.leaders
+
+
+const mapStateToProps = state => {
+    return {
+        leaders: state.leaders
     }
 }
 
@@ -43,63 +46,67 @@ class About extends Component {
 
     render() {
 
-        const renderLeader= ({ item, index }) => {
+        const renderLeader = ({ item, index }) => {
             return (
                 <ListItem
                     key={index}
                     title={item.name}
                     subtitle={item.description}
                     hideChevron={true}
-                    leftAvatar={{ source:{uri:baseUrl+item.image}}}
+                    leftAvatar={{ source: { uri: baseUrl + item.image } }}
                 />
 
             );
         }
 
-        if(this.props.leaders.isLoading){
-            return(
+        if (this.props.leaders.isLoading) {
+            return (
                 <ScrollView style={{ marginTop: 10 }}>
-               <History/>
-                <Card title="Corporate Leadership" >
-                    <Loading/>
-                
-                </Card>
+                    <History />
+                    <Card title="Corporate Leadership" >
+                        <Loading />
+
+                    </Card>
                 </ScrollView>
-            
+
 
             );
         }
-        else if(this.props.leaders.errMess){
-            
-            return(
+        else if (this.props.leaders.errMess) {
+
+            return (
                 <ScrollView style={{ marginTop: 10 }}>
-               <History/>
-                <Card title="Corporate Leadership" >
-                <Text>{this.props.leaders.errMess}</Text>
-                </Card>
+                    <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                        <History />
+                        <Card title="Corporate Leadership" >
+                            <Text>{this.props.leaders.errMess}</Text>
+                        </Card>
+                    </Animatable.View>
                 </ScrollView>
-            
+
 
             );
 
         }
-        else{
-        return (
+        else {
+            return (
 
-            <ScrollView style={{ marginTop: 10 }}>
-               <History/>
-                <Card title="Corporate Leadership" >
-                        <FlatList
-                            data={this.props.leaders.leaders}
-                            renderItem={renderLeader}
-                            keyExtractor={item => item.id.toString()}
-                        />
-                </Card>
-            </ScrollView>
+                <ScrollView style={{ marginTop: 10 }}>
+                    <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+                        <History />
+                        <Card title="Corporate Leadership" >
+                            <FlatList
+                                data={this.props.leaders.leaders}
+                                renderItem={renderLeader}
+                                keyExtractor={item => item.id.toString()}
+                            />
+                        </Card>
+                    </Animatable.View>
+                </ScrollView>
 
 
 
-        );
+            );
         }
     }
 
