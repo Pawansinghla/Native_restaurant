@@ -11,6 +11,7 @@ import { Icon } from 'react-native-elements';
 import {connect} from 'react-redux';
 import {fetchDishes,fetchLeaders,fetchPromos,fetchComments } from '../redux/ActionCreators';
 import  Favorites from  './FavoriteComponent';
+import Login from './LoginComponent';
 
 const mapStateToProps=state=>{
     return{
@@ -146,6 +147,23 @@ const FavoritesNavigator = createStackNavigator({
     })
 });
 
+const LoginNavigator = createStackNavigator({
+    Login: { screen:Login }
+}, {
+    navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        },
+        headerLeft: <Icon name="menu" size={24}
+            color='white'
+            onPress={() => navigation.toggleDrawer()}
+        />
+    })
+});
 
 const CustomDrawerContentComponent = (props) => (
     <ScrollView>
@@ -169,6 +187,25 @@ const CustomDrawerContentComponent = (props) => (
 );
 
 const MainNavigator = createDrawerNavigator({
+    Login: {
+        screen: LoginNavigator,
+        navigationOptions: {
+            title: 'Login',
+            drawLabel: 'Login',
+            drawerIcon: ({ tintcolor }) => (
+                <Icon
+                    name='sign-in'
+                    type='font-awesome'
+                    size={24}
+                   // color="blue"
+                   color={tintcolor}
+                />
+            )
+
+        }
+
+
+    },
     Home: {
         screen: HomeNavigator,
         navigationOptions: {
@@ -280,6 +317,7 @@ const MainNavigator = createDrawerNavigator({
         },
     }
 }, {
+    initialRouteName:'Home',
     drawerBackgroundColor: '#D1C4E9',
     contentComponent:CustomDrawerContentComponent
 
