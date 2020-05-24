@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import { ScrollView, Text } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Card,Button,Icon } from 'react-native-elements';
 
 import * as Animatable from 'react-native-animatable';
-
+import * as MailComposer from 'expo-mail-composer';
 
 
 function Contact() {
+
+    sendMail=()=>{
+        MailComposer.composeAsync({
+            recipients:['confusion@food.net'],
+            subject:'Enquiry',
+            body:'To Whom it  may concern:'
+        });
+
+    }
+
+    
 
     return (
         <Animatable.View animation="fadeInDown" duration={2000} >
@@ -26,6 +37,20 @@ function Contact() {
                         Fax: +852 8765 4321</Text>
                     <Text style={{ margin: 10, fontSize: 16 }}>
                         Email:confusion@food.net</Text>
+                    <Button
+                    title="Send Email"
+                    buttonStyle={{backgroundColor:"#512DA8"}}
+                    icon={
+                        <Icon
+                        name="envelope-o"
+                        type="font-awesome"
+                        color="white"
+                        />
+                    }
+                    onPress={()=>sendMail()}
+                
+                    
+                    />
                 </ScrollView>
 
             </Card>
