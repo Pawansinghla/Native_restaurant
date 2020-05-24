@@ -9,7 +9,7 @@ import * as Animatable from 'react-native-animatable';
 function Contact() {
 
     return (
-        <Animatable.View animation="fadeInDown" duration={2000} delay={1000}>
+        <Animatable.View animation="fadeInDown" duration={2000} >
             <Card title="Contact Information">
                 <ScrollView >
                     <Text style={{ margin: 10, fontSize: 16 }}>

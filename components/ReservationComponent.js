@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Modal, Text, StyleSheet, ScrollView, View, Switch, Picker, Button ,Alert} from 'react-native';
-import { Card } from 'react-native-elements';
+import { Text, StyleSheet, ScrollView, View, Switch, Picker, Button, Alert, Platform } from 'react-native';
 import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
-
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
 
 class Reservation extends Component {
     constructor(props) {
@@ -17,14 +17,35 @@ class Reservation extends Component {
         }
     }
 
-    toggleModal() {
-        this.setState({ showModal: !this.state.showModal })
+    // toggleModal() {
+    //     this.setState({ showModal: !this.state.showModal })
 
-    }
+    // }
 
     handleReservation = () => {
         console.log(JSON.stringify(this.state));
-        this.toggleModal();
+        // this.toggleModal();
+        Alert.alert(
+            'Your Reservation  OK?',
+            `Number of guests: ${this.state.guests}\nSmoking? ${this.state.smoking ? 'Yes' : 'No'}\nDate and Time:${this.state.date}`,
+
+            [
+                {
+                    text: 'Cancel',
+                    styles: 'cancel',
+                    onPress: () => this.resetForm()
+                },
+                {
+                    text: 'Ok',
+                    onPress: () => {
+                        this.presentLocalNotification(this.state.date);
+                        this.resetForm();
+                    }
+                },
+
+            ],
+            { cancelable: false }
+        );
     }
 
     resetForm = () => {
@@ -36,6 +57,46 @@ class Reservation extends Component {
         });
 
     }
+
+
+    async obtainNotificationPermission() {
+        let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to show notifications');
+            }
+        }
+        return permission;
+    }
+
+    async presentLocalNotification(date) {
+        await this.obtainNotificationPermission();
+          Notifications.presentLocalNotificationAsync({
+                  title:'Your Reservation',
+                  body:'Reservation for '+ date +' requested',
+                  ios:{
+                       sound:true
+                   },
+                  android:{
+                    //  sound:true,
+                      //vibrate:'true',
+                      color:'#512DA8',
+                      
+
+                  }
+                  
+              });
+                Notifications.createChannelAndroidAsync('default', {
+                  name: 'default',
+                  sound: true,
+
+                  vibrate:true
+                });
+              
+
+    }
+
 
 
 
@@ -117,29 +178,10 @@ class Reservation extends Component {
                             title="Reserve"
                             color="#512DA8"
                             accessibilityLabel='Learn more about this purpule button'
-                            onPress={() =>{
-                                Alert.alert(
-                                    'Your Reservation  OK?',
-                                   `Number of guests: ${this.state.guests}\nSmoking? ${this.state.smoking ? 'Yes' : 'No'}\nDate and Time:${this.state.date}`,
+                            onPress={() => this.handleReservation()}
 
-                                    [
-                                        {
-                                            text:'Cancel',
-                                            styles:'cancel',
-                                            onPress:()=>this.resetForm()
-                                        },
-                                        {
-                                            text:'Ok',
-                                            onPress:()=>this.resetForm()
-                                        },
 
-                                    ],
-                                    {cancelable:false}
-                                );
-                            } 
-                        }                               
-                                //this.handleReservation()}
-                            
+
                         />
 
                     </View>

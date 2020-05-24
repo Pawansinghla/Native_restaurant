@@ -54,7 +54,7 @@ class Login extends Component {
                     }}
                     onChangeText={(username) => this.setState({ username })}
                     value={this.state.username}
-                    containerStyle={styles.formInput}
+                    inputContainerStyle={styles.formInput}
                 />
 
                 <Input
@@ -65,7 +65,7 @@ class Login extends Component {
                     }}
                     onChangeText={(password) => this.setState({ password })}
                     value={this.state.password}
-                    containerStyle={styles.formInput}
+                   inputContainerStyle={styles.formInput}
                 
                 />
 
@@ -99,7 +99,6 @@ class Login extends Component {
 const styles = StyleSheet.create({
     container: {
         justifyContent:'center',
-        alignItems:'center',
         margin: 20,
     },
     formInput: {
