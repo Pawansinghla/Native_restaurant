@@ -2,28 +2,29 @@ import React, { Component } from 'react';
 import Menu from './MenuComponent';
 import Dishdetail from './DishdetailComponent';
 import Reservation from './ReservationComponent';
-import { ScrollView, View, Platform, Image, StyleSheet,Text } from 'react-native';
+import { ToastAndroid, ScrollView, View, Platform, Image, StyleSheet, Text } from 'react-native';
 import { createStackNavigator, createDrawerNavigator, DrawerItems, SafeAreaView } from 'react-navigation';
 import Home from './HomeComponent';
 import Contact from './ContactComponent';
 import About from './AboutComponent';
 import { Icon } from 'react-native-elements';
-import {connect} from 'react-redux';
-import {fetchDishes,fetchLeaders,fetchPromos,fetchComments } from '../redux/ActionCreators';
-import  Favorites from  './FavoriteComponent';
+import { connect } from 'react-redux';
+import { fetchDishes, fetchLeaders, fetchPromos, fetchComments } from '../redux/ActionCreators';
+import Favorites from './FavoriteComponent';
 import Login from './LoginComponent';
+import NetInfo from '@react-native-community/netinfo';
 
-const mapStateToProps=state=>{
-    return{
+const mapStateToProps = state => {
+    return {
     }
 }
 
 
-const mapDispatchToProps=dispatch=>({
-    fetchDishes:()=>dispatch(fetchDishes()),
-    fetchComments:()=>dispatch(fetchComments()),
-    fetchPromos:()=>dispatch(fetchPromos()),
-    fetchLeaders:()=>dispatch(fetchLeaders()),
+const mapDispatchToProps = dispatch => ({
+    fetchDishes: () => dispatch(fetchDishes()),
+    fetchComments: () => dispatch(fetchComments()),
+    fetchPromos: () => dispatch(fetchPromos()),
+    fetchLeaders: () => dispatch(fetchLeaders()),
 
 });
 
@@ -112,7 +113,7 @@ const HomeNavigator = createStackNavigator({
     })
 });
 const ReservationNavigator = createStackNavigator({
-    Reservation: { screen:Reservation }
+    Reservation: { screen: Reservation }
 }, {
     navigationOptions: ({ navigation }) => ({
         headerStyle: {
@@ -130,7 +131,7 @@ const ReservationNavigator = createStackNavigator({
 });
 
 const FavoritesNavigator = createStackNavigator({
-    Favorites: { screen:Favorites }
+    Favorites: { screen: Favorites }
 }, {
     navigationOptions: ({ navigation }) => ({
         headerStyle: {
@@ -148,7 +149,7 @@ const FavoritesNavigator = createStackNavigator({
 });
 
 const LoginNavigator = createStackNavigator({
-    Login: { screen:Login }
+    Login: { screen: Login }
 }, {
     navigationOptions: ({ navigation }) => ({
         headerStyle: {
@@ -173,11 +174,11 @@ const CustomDrawerContentComponent = (props) => (
                 <View style={{ flex: 1 }}>
                     <Image source={require('./images/logo.png')}
                         style={styles.drawerImage} />
-                  </View>
-                    <View style={{ flex: 2 }}>
-                        <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
-                    </View>
-              
+                </View>
+                <View style={{ flex: 2 }}>
+                    <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
+                </View>
+
             </View>
             <DrawerItems {...props} />
         </SafeAreaView>
@@ -197,8 +198,8 @@ const MainNavigator = createDrawerNavigator({
                     name='sign-in'
                     type='font-awesome'
                     size={24}
-                   // color="blue"
-                   color={tintcolor}
+                    // color="blue"
+                    color={tintcolor}
                 />
             )
 
@@ -216,8 +217,8 @@ const MainNavigator = createDrawerNavigator({
                     name='home'
                     type='font-awesome'
                     size={24}
-                   // color="blue"
-                   color={tintcolor}
+                    // color="blue"
+                    color={tintcolor}
                 />
             )
 
@@ -280,7 +281,7 @@ const MainNavigator = createDrawerNavigator({
 
         },
     },
-    
+
     Reservation: {
         screen: ReservationNavigator,
         navigationOptions: {
@@ -298,7 +299,7 @@ const MainNavigator = createDrawerNavigator({
 
         },
     },
-    
+
     Favorites: {
         screen: FavoritesNavigator,
         navigationOptions: {
@@ -317,23 +318,67 @@ const MainNavigator = createDrawerNavigator({
         },
     }
 }, {
-    initialRouteName:'Home',
+    initialRouteName: 'Home',
     drawerBackgroundColor: '#D1C4E9',
-    contentComponent:CustomDrawerContentComponent
+    contentComponent: CustomDrawerContentComponent
 
 });
 
 
 class Main extends Component {
-    componentDidMount(){
+    componentDidMount() {
         this.props.fetchDishes();
         this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
+
+        NetInfo.fetch()
+        .then((connectionInfo) => {
+            ToastAndroid.show('Initial Network Connectivity Type: '
+                + connectionInfo.type, ToastAndroid.LONG)
+        });
+
+        NetInfo.addEventListener(connectionChange => this.handleConnectivityChange(connectionChange));
+
     }
+
+
+    // console.log('Connection type', state.type);
+    //console.log('Is connected?', state.isConnected);
+
+    componentWillUnmount() {
+        NetInfo.removeEventListener(connectionChange=> this.handleConnectivityChange(connectionChange));
+    }
+
+    handleConnectivityChange = (connectionInfo) => {
+        switch (connectionInfo.type) {
+            case 'none':
+                ToastAndroid.show('You are now offline!', ToastAndroid.LONG);
+                break;
+
+            case 'wifi':
+                ToastAndroid.show('You are now connected to wifi!', ToastAndroid.SHORT);
+                break;
+
+            case 'cellular':
+                ToastAndroid.show('You are now connected to Cellular!', ToastAndroid.LONG);
+                break;
+
+            case 'unknown':
+                ToastAndroid.show('You are now have an Unknown COnnection!', ToastAndroid.LONG);
+                break;
+
+            default:
+                break;
+
+
+        }
+
+    }
+
     render() {
         return (
-            <View style={{ flex: 1,           paddingTop: Platform.OS === "ios" ? 0 : Expo.Constants.statusBarHeight}}>
+            <View style={{ flex: 1, paddingTop: Platform.OS === "ios" ? 0 : Expo.Constants.statusBarHeight }}>
                 <MainNavigator />
             </View>
 
@@ -346,28 +391,28 @@ class Main extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+        flex: 1,
     },
     drawerHeader: {
-      backgroundColor: '#512DA8',
-      height: 140,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flex: 1,
-      flexDirection: 'row'
+        backgroundColor: '#512DA8',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row'
     },
     drawerHeaderText: {
-      color: 'white',
-      fontSize: 24,
-      fontWeight: 'bold'
+        color: 'white',
+        fontSize: 24,
+        fontWeight: 'bold'
     },
     drawerImage: {
-      margin: 10,
-      width: 80,
-      height: 60
+        margin: 10,
+        width: 80,
+        height: 60
     }
-  });
-  
+});
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(Main);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
