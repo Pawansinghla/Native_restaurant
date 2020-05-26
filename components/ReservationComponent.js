@@ -4,6 +4,9 @@ import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
+import * as Calendar from 'expo-calendar';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 class Reservation extends Component {
     constructor(props) {
@@ -39,6 +42,7 @@ class Reservation extends Component {
                     text: 'Ok',
                     onPress: () => {
                         this.presentLocalNotification(this.state.date);
+                        this.addReservationToCalendar(this.state.date);
                         this.resetForm();
                     }
                 },
@@ -58,6 +62,74 @@ class Reservation extends Component {
 
     }
 
+    async obtainCalendarPermission() {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.CALENDAR);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to show notifications');
+            }
+        }
+        return permission;
+
+    }
+   /*
+   async addReservationToCalendar(date) {
+    await this.obtainCalendarPermission();
+    const startDate = new Date(Date.parse(date));
+    const endDate = new Date(Date.parse(date) + (2 * 60 * 60 * 1000));
+    Calendar.createEventAsync(
+        Calendar.DEFAULT,
+        {
+          title: 'Con Fusion Table Reservation',
+          location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong',
+          startDate,
+          endDate,
+          timeZone: 'Asia/Hong_Kong',
+            
+        },
+    );
+    
+}*/
+
+//Calendar.createEventAsync(Calendar.DEFAULT,details)
+//it is  not available 
+ async getCalenderId(){
+    const calendarId = await Calendar.createCalendarAsync({
+        title: 'test',
+        color: '#00AAEE',
+        source: {
+          isLocalAccount: false,
+          name: 'mobile',
+          type: 'testing.com',
+        },
+        name: 'coursera',
+        ownerAccount: 'confusion@test.com',
+        accessLevel: 'owner',
+      });
+      return calendarId
+}
+async addReservationToCalendar(date){
+await this.obtainCalendarPermission()
+let id=await this.getCalenderId()
+let endDate=new Date(date)
+endDate.setHours(endDate.getHours()+2)
+await Calendar.createEventAsync(id,{
+    title:'Con Fusion Table Reservation',
+    startDate:new Date(date),
+    endDate:endDate,
+    timeZone:'Asia/Hong_Kong',
+    location:'121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong',
+    
+})
+.then(data=>ToastAndroid.show('Sucess',ToastAndroid.LONG))
+.catch(err=>console.log("Failed"))
+}
+
+
+
+
+
 
     async obtainNotificationPermission() {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
@@ -70,30 +142,31 @@ class Reservation extends Component {
         return permission;
     }
 
+
     async presentLocalNotification(date) {
         await this.obtainNotificationPermission();
-          Notifications.presentLocalNotificationAsync({
-                  title:'Your Reservation',
-                  body:'Reservation for '+ date +' requested',
-                  ios:{
-                       sound:true
-                   },
-                  android:{
-                    //  sound:true,
-                      //vibrate:'true',
-                      color:'#512DA8',
-                      
+        Notifications.presentLocalNotificationAsync({
+            title: 'Your Reservation',
+            body: 'Reservation for ' + date + ' requested',
+            ios: {
+                sound: true
+            },
+            android: {
+                //  sound:true,
+                //vibrate:'true',
+                color: '#512DA8',
 
-                  }
-                  
-              });
-                Notifications.createChannelAndroidAsync('default', {
-                  name: 'default',
-                  sound: true,
 
-                  vibrate:true
-                });
-              
+            }
+
+        });
+        Notifications.createChannelAndroidAsync('default', {
+            name: 'default',
+            sound: true,
+
+            vibrate: true
+        });
+
 
     }
 
@@ -142,6 +215,18 @@ class Reservation extends Component {
 
                     <View style={styles.formRow}>
                         <Text style={styles.formLabel}>Date and Time</Text>
+                        {/* <DateTimePicker
+                        testId='dateTimePicker'
+                        is24Hour={true}
+                        display="default"
+                        minimumDate={new Date(2020,5,20)}
+                        vlaue={new Date(Date.parse(this.state.date))}
+                        
+
+                        onChange={(date) => { this.setState({ date: date }) }}
+
+
+                        /> */}
                         <DatePicker
                             style={{ flex: 2, marginRight: 20 }}
                             date={this.state.date}
