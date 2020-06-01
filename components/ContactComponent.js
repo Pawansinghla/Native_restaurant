@@ -24,7 +24,7 @@ function Contact() {
             <Card title="Contact Information">
                 <ScrollView >
                     <Text style={{ margin: 10, fontSize: 16 }}>
-                        121,Clear Water Bay Roa
+                     121,Clear Water Bay Roa
                 </Text>
                     <Text style={{ margin: 10, fontSize: 16 }}>Clear Water Bay, Kowloon
                     </Text>
