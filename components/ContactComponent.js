@@ -10,7 +10,7 @@ function Contact() {
 
     sendMail=()=>{
         MailComposer.composeAsync({
-            recipients:['confusion@food.net'],
+            recipients:['pawansinghla300@gmail.com'],
             subject:'Enquiry',
             body:'To Whom it  may concern:'
         });
@@ -24,12 +24,12 @@ function Contact() {
             <Card title="Contact Information">
                 <ScrollView >
                     <Text style={{ margin: 10, fontSize: 16 }}>
-                     121,Clear Water Bay Roa
+                    234, Water Bay, Mathura
                 </Text>
-                    <Text style={{ margin: 10, fontSize: 16 }}>Clear Water Bay, Kowloon
+                    <Text style={{ margin: 10, fontSize: 16 }}>Water Bay , Mathura UP
                     </Text>
                     <Text style={{ margin: 10, fontSize: 16 }}>
-                        HONG KONG
+                       UP,India
                     </Text>
                     <Text style={{ margin: 10, fontSize: 16 }}>
                         Tel: +852 1234 5678</Text>
